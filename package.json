@@ -21,11 +21,17 @@
   "dependencies": {
     "@babel/cli": "^7.7.4",
     "@babel/core": "^7.7.4",
+<<<<<<< HEAD
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
     "@babel/preset-react": "^7.7.4",
     "babel-loader": "^8.0.6",
     "prop-types": "^15.7.2",
+=======
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+>>>>>>> 3d1e054a0d3f9016bee31c803744b98a0e9058ef
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "webpack": "^4.41.2",

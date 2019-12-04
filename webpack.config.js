@@ -10,7 +10,10 @@ module.exports = {
         path: path.resolve(__dirname,'static', 'build'),
         filename: 'app.js',
     },
+<<<<<<< HEAD
     watch: process.argv[process.argv.length - 1] === 'development',
+=======
+>>>>>>> 3d1e054a0d3f9016bee31c803744b98a0e9058ef
     module: {
         rules: [
             {
@@ -20,6 +23,7 @@ module.exports = {
                 exclude: /node_modules/,
                 options: {
                     presets: ['@babel/env', '@babel/react'],
+<<<<<<< HEAD
                     plugins: [
                         [
                             "@babel/plugin-proposal-class-properties",
@@ -38,5 +42,11 @@ module.exports = {
         extensions: ['.js', '.jsx'],
      },
  
+=======
+                },
+            },
+        ],
+    },
+>>>>>>> 3d1e054a0d3f9016bee31c803744b98a0e9058ef
 };
 
