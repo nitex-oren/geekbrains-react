@@ -1,78 +1,100 @@
 import React from 'react';
+import PropTypes from "prop-types";
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Icon from '@material-ui/core/Icon';
 import SendIcon from '@material-ui/icons/Send';
 import { makeStyles } from '@material-ui/core/styles';
-
-
 import Message from './Message';
-import '../styles/styles.css'
-
+import '../styles/styles.css';
 
 export default class MessageField extends React.Component {
-    state = {
-        messages: [{ sender: 'robot', text: "Привет" }, { sender: 'robot', text: "Как дела?" }],
-        input: ''
-    };
+   static propTypes = {
+       chatId: PropTypes.number.isRequired,
+   };
 
-    textInput = React.createRef();
+   state = {
+       chats: {
+           1: {title: 'Чат 1', messageList: [1,2]},
+           2: {title: 'Чат 2', messageList: []},
+           3: {title: 'Чат 3', messageList: []},
+       },
+       messages: {
+           1: { text: "Привет!", sender: 'bot' },
+           2: { text: "Здравствуйте!", sender: 'bot' },
+       },
+       input: '',
+   };
 
-    componentDidMount() {
-        this.textInput.current.focus();
-    }
+   componentDidUpdate(prevProps, prevState) {
+       const { messages } = this.state;
+       if (Object.keys(prevState.messages).length < Object.keys(messages).length &&
+           Object.values(messages)[Object.values(messages).length - 1].sender === 'me') {
+           setTimeout(() =>
+               this.handleSendMessage('Не приставай ко мне, я робот!', 'bot'), 1000);
+       }
+   }
 
-    componentDidUpdate() {
-        if (this.state.messages[this.state.messages.length - 1].sender === 'me') {
-            this.setState({ messages: [...this.state.messages, { sender: 'robot', text: 'Не приставай ко мне, я робот!' }] });
-        }
-    }
-    handleSendMessage = (message) => {
-        this.setState({
-            messages: [...this.state.messages, { sender: 'me', text: this.state.input }],
-            input: ''
-        });
-    };
-    handleInput = (e) => {
-        this.setState({ [e.target.name]: e.target.value })
-    }
-    handleKeyUp = (e) => {
-        if (e.keyCode === 13) {
-            this.handleSendMessage()
-        }
-    }
+   handleSendMessage = (message, sender) => {
+       const { messages, chats, input } = this.state;
+       const { chatId } = this.props;
 
+       if (input.length > 0 || sender === 'bot') {
+           const messageId = Object.keys(messages).length + 1;
+           this.setState({
+               messages: {...messages,
+                   [messageId]: {text: message, sender: sender}},
+               chats: {...chats,
+                   [chatId]: { ...chats[chatId],
+                       messageList: [...chats[chatId]['messageList'], messageId]},
+                input: '',
+               },
+           })
+       }
+       if (sender === 'me') {
+           this.setState({ input: '' })
+       }
+   };
 
+   handleChange = (event) => {
+       this.setState({ [event.target.name]: event.target.value });
+   };
 
+   handleKeyUp = (event) => {
+       if (event.keyCode === 13) { // Enter
+           this.handleSendMessage(this.state.input, 'me')
+       }
+   };
 
-    render() {
-        const messageElements = this.state.messages.map((message, index) => (
-            <Message key={index} text={message.text} sender={message.sender} />));
+   render() {
+       const { messages, chats } = this.state;
+       const { chatId } = this.props;
 
-        return <div className="message-box">
-            <div className="message-field">
+       const messageElements = chats[chatId].messageList.map((messageId, index) => (
+           <Message
+               key={ index }
+               text={ messages[messageId].text }
+               sender={ messages[messageId].sender }
+           />));
+
+       return [
+            <div className="message-box">
+            <div key='messageElements' className="message-field">
                 {messageElements}
             </div>
-
-            <IconButton
-                color="primary"
-                onClick={this.handleSendMessage}
-            ><TextField
-                    id="standard-basic"
+            <div key='textInput' style={ { width: '100%', display: 'flex' } }>
+                <TextField
+                    
                     fullWidth={true}
                     ref={this.textInput}
                     name="input"
                     placeholder="Введите сообщение"
                     value={this.state.input}
-                    onChange={this.handleInput}
+                    onChange={this.handleChange}
                     onKeyUp={this.handleKeyUp}
-                    margin="dense"
-                /><SendIcon
-                    fontSize="large"
-                /></IconButton>
+                    />
+                <SendIcon onClick={ () => this.handleSendMessage(this.state.input, 'me') }/>
+            </div>
 
-        </div>
-
-    }
+           </div>
+       ]
+   }
 }

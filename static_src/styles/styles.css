@@ -19,13 +19,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .chatlist {
     display: flex;
     flex-direction: column;
     width: 28%;
-    height: calc(100vh - 220px);
+    height: calc(100vh - 236px);
     background: #cfd8dc;
 }
 .message-box {
