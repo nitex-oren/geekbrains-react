@@ -1,40 +1,36 @@
 import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
+// import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
+import SendIcon from '@material-ui/icons/Send';
 
 export default class ChatList extends React.Component {
-    state = {
-
-    };
-  
-
-
     render() {
-        return <div className="chatlist">
-            <List component="nav" >
-                <ListItem button
-                    selected={true}
-                    // onClick={event => handleListItemClick(event, 0)}
-                    >
-                    <ListItemText primary="Главный чат" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Обсуждние" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Курилка" />
-                </ListItem>
-                <ListItem button>
-                    <ListItemText primary="Корзина" />
-                </ListItem>
+        return (
+            <List  className="chatlist">
+                <Link href='/chat/1/' to='/chat/1/'>
+                    <ListItem>
+                    <ListItemText primary="Chat 1"/>
+                    <SendIcon />
+                    </ListItem>
+                </Link>
+                <Link href='/chat/2/' to='/chat/2/'>
+                <ListItem>
+                    <ListItemText primary="Chat 2"/>
+                    <SendIcon />
+                    </ListItem>
+                </Link>
+                <Link href="/chat/3/" to='/chat/3/'>
+                <ListItem>
+                    <ListItemText primary="Chat 3"/>
+                     <SendIcon />
+                    </ListItem>
+                </Link>
+
             </List>
 
-
-
-
-        </div>
+        )
     }
 }
