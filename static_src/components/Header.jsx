@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
+import '../styles/styles.css';
 
 export default class Header extends React.Component {
   static propTypes = {
