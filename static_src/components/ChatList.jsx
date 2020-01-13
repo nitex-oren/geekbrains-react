@@ -3,24 +3,28 @@ import {bindActionCreators} from "redux";
 import connect from "react-redux/es/connect/connect";
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import { Link } from 'react-router-dom';
+import {push} from 'connected-react-router'
 import SendIcon from '@material-ui/icons/Send';
 import AddIcon from '@material-ui/icons/Add';
 import PropTypes from "prop-types";
 import TextField from '@material-ui/core/TextField';
 import ListItemText from '@material-ui/core/ListItemText';
-import { addChat } from '../actions/chatActions';
+import { addChat,  blinkChat} from '../actions/chatActions';
 import '../styles/styles.css';
 
 class ChatList extends React.Component {
     static propTypes = {
         chats: PropTypes.object.isRequired,
         addChat: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired,
+        blink: PropTypes.string,
     };
     state = {
         input: '',
     };
-
+    static defaultProps = {
+        blink: undefined,
+      };
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
     };
@@ -38,15 +42,21 @@ class ChatList extends React.Component {
         }
     };
 
+    handleNavigate = (link) => {
+        this.props.push(link);
+    }
+
     render() {
-        const { chats } = this.props;
+        const { chats, blink } = this.props;
         const chatElements = Object.keys(chats).map(chatId => (
-            <Link key={chatId} to={`/chat/${chatId}`}>
-                <ListItem>
-                    <ListItemText primary={chats[chatId].title}/>
-                    <SendIcon />
+                <ListItem 
+                style={{backgroundColor: blink == chatId ? 'green' : ''}}
+                    key={chatId}
+                    onClick = { () => this.handleNavigate(`/chat/${chatId}`)}>
+                        <ListItemText primary={chats[chatId].title}/>
+                        <SendIcon />
                 </ListItem>
-            </Link >));
+            ));
 
         return (
             <List className="chatlist">
@@ -54,7 +64,7 @@ class ChatList extends React.Component {
                 <ListItem key="Add new chat"  onClick={this.handleAddChat}   style={{ height: '60px' }}>
                     <TextField
                         key="textField"
-                        fullWidth
+                        fullWidth = {true}
                         name="input"
                         placeholder="Добавить новый чат"
                         onChange={this.handleChange}
@@ -69,8 +79,9 @@ class ChatList extends React.Component {
 
 const mapStateToProps = ({ chatReducer }) => ({
     chats: chatReducer.chats,
+    blink: chatReducer.blink,
  });
  
- const mapDispatchToProps = dispatch => bindActionCreators({ addChat }, dispatch);
+ const mapDispatchToProps = dispatch => bindActionCreators({ addChat, push }, dispatch);
  
  export default connect(mapStateToProps, mapDispatchToProps)(ChatList);
