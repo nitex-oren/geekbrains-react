@@ -61,10 +61,10 @@ class ChatList extends React.Component {
         return (
             <List className="chatlist">
                 {chatElements}
-                <ListItem key="Add new chat"  onClick={this.handleAddChat}   style={{ height: '60px' }}>
+                <ListItem key="Add new chat"  onClick={this.handleAddChat}   style={{ height: '40px' }}>
                     <TextField
                         key="textField"
-                        fullWidth = {true}
+                        fullWidth = {false}
                         name="input"
                         placeholder="Добавить новый чат"
                         onChange={this.handleChange}

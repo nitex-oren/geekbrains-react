@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { loadChats } from "../actions/chatActions";
 import '../styles/styles.css';
 import { Link } from 'react-router-dom';
+import PushToggle from '../components/PushToggle';
 
 class Header extends React.Component {
   static propTypes = {
@@ -23,8 +24,9 @@ class Header extends React.Component {
     const { chats, chatId } = this.props;
 
     return (<div className="header">
+      <PushToggle />
       <div className="headheader">Приветствуем тебя в Нашем великом чате)))</div>
-      <p style={{ fontSize: '20px' }}>Текущий чат: {chats[chatId].title}</p>
+      <div>Текущий чат: {chats[chatId].title}</div>
       <Link href="/profile/" to='/profile/'>   Профиль   </Link>
     </div>
     )
